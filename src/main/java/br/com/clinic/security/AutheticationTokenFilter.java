@@ -1,0 +1,60 @@
+package br.com.clinic.security;
+
+import br.com.clinic.entities.models.Doctor;
+import br.com.clinic.repositories.DoctorRepository;
+import br.com.clinic.services.TokenService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+public class AutheticationTokenFilter extends OncePerRequestFilter {
+
+    private final TokenService tokenService;
+    private final DoctorRepository doctorRepository;
+
+    public AutheticationTokenFilter(TokenService tokenService, DoctorRepository doctorRepository) {
+        this.tokenService = tokenService;
+        this.doctorRepository = doctorRepository;
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
+        String token = recoverToken(request);
+        boolean tokenIsValid = tokenService.isTokenValid(token);
+
+        if (tokenIsValid) {
+            autheticateToken(token);
+        }
+
+        filterChain.doFilter(request, response);
+    }
+
+    private void autheticateToken(String token) {
+
+        String username = tokenService.getUsernameToken(token);
+
+        Doctor doctor = doctorRepository.findByUsername(username).get();
+
+        Authentication authetication = new UsernamePasswordAuthenticationToken(doctor, doctor.getPassword(), doctor.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authetication);
+    }
+
+    private String recoverToken(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+
+        if (token == null || !token.startsWith("Bearer ")) {
+            return null;
+        }
+
+        return token.substring(7);
+    }
+}
