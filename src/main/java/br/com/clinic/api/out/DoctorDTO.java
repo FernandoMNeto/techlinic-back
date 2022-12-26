@@ -29,8 +29,8 @@ public class DoctorDTO {
         this.id = doctor.getId();
         this.firstName = doctor.getFirstName();
         this.lastName = doctor.getLastName();
-        this.username = doctor.getUsername();
-        this.password = doctor.getPassword();
+        this.username = doctor.getUserInfo().getUsername();
+        this.password = doctor.getUserInfo().getPassword();
         this.cpf = doctor.getCpf();
         this.crm = doctor.getCrm();
         this.bornAt = doctor.getBornAt();

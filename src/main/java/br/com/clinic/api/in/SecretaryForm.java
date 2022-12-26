@@ -2,6 +2,7 @@ package br.com.clinic.api.in;
 
 import br.com.clinic.entities.models.Address;
 import br.com.clinic.entities.models.Contact;
+import br.com.clinic.entities.models.UserInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,10 +17,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class SecretaryForm {
     @NotBlank
-    private String username;
-    @NotBlank
-    private String password;
-    @NotBlank
     private String firstName;
     @NotBlank
     private String lastName;
@@ -27,6 +24,8 @@ public class SecretaryForm {
     private String cpf;
     @Past
     private LocalDate bornAt;
+    @Valid
+    private UserInfo userInfo;
     @Valid
     private Contact contact;
     @Valid

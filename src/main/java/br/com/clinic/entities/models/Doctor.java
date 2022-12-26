@@ -21,26 +21,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Doctor extends People implements UserDetails {
+public class Doctor extends People {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
     private String crm;
-    @Column(unique = true)
-    private String username;
-    private String password;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userinfo_id")
+    private UserInfo userInfo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
     private List<Consult> consults;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Role> roles = new ArrayList<>();
 
     public Doctor(DoctorForm doctorForm) {
         super(doctorForm.getFirstName(), doctorForm.getLastName(),
                 doctorForm.getCpf(), doctorForm.getBornAt(), doctorForm.getContact(), doctorForm.getAddress());
-        this.username = doctorForm.getUsername();
-        this.password = doctorForm.getPassword();
+        this.userInfo = doctorForm.getUserInfo();
         this.crm = doctorForm.getCrm();
         this.consults = new ArrayList<>();
     }
@@ -48,42 +46,4 @@ public class Doctor extends People implements UserDetails {
         this.consults.add(consult);
     }
 
-    public void addRole(Role role) {
-        this.roles.add(role);
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

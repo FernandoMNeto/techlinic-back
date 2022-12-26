@@ -8,5 +8,4 @@ import java.util.Optional;
 
 @Repository
 public interface SecretaryRepository extends JpaRepository<Secretary, Long> {
-    Optional<Secretary> findByUsername(String username);
 }

@@ -3,6 +3,7 @@ package br.com.clinic.controllers;
 import br.com.clinic.api.in.DoctorForm;
 import br.com.clinic.api.out.DoctorDTO;
 import br.com.clinic.services.DoctorService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;

@@ -4,16 +4,12 @@ import br.com.clinic.api.in.SecretaryForm;
 import br.com.clinic.api.out.SecretaryDTO;
 import br.com.clinic.entities.models.Address;
 import br.com.clinic.entities.models.Contact;
-import br.com.clinic.entities.models.Doctor;
 import br.com.clinic.entities.models.Secretary;
+import br.com.clinic.entities.models.UserInfo;
 import br.com.clinic.error.resourcenotfound.ResourceNotFoundException;
 import br.com.clinic.repositories.SecretaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -26,19 +22,20 @@ import java.util.Optional;
 public class SecretaryService {
 
     private final SecretaryRepository secretaryRepository;
-
     private final ContactService contactService;
     private final AddressService addressService;
+    private final UserInfoService userInfoService;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public SecretaryService(SecretaryRepository secretaryRepository, ContactService contactService,
-                            AddressService addressService, RoleService roleService,
+                            AddressService addressService, UserInfoService userInfoService, RoleService roleService,
                             PasswordEncoder passwordEncoder) {
         this.secretaryRepository = secretaryRepository;
         this.contactService = contactService;
         this.addressService = addressService;
+        this.userInfoService = userInfoService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -65,13 +62,15 @@ public class SecretaryService {
                                                           UriComponentsBuilder uriBuilder) {
         Contact contact = secretaryForm.getContact();
         Address address = secretaryForm.getAddress();
+        UserInfo userInfo = secretaryForm.getUserInfo();
 
         contactService.registerContact(contact);
+        userInfoService.registerUserInfo(userInfo);
         addressService.registerAddress(address);
 
         Secretary secretary = new Secretary(secretaryForm);
-        secretary.setPassword(passwordEncoder.encode(secretary.getPassword()));
-        secretary.addRole(roleService.registerRole("SECRETARY"));
+        secretary.getUserInfo().setPassword(passwordEncoder.encode(secretary.getUserInfo().getPassword()));
+        secretary.getUserInfo().addRole(roleService.registerRole("SECRETARY"));
         secretary.setContact(contact);
         secretary.setAddress(address);
 
@@ -96,8 +95,6 @@ public class SecretaryService {
         secretary.setFirstName(secretaryForm.getFirstName());
         secretary.setLastName(secretaryForm.getLastName());
         secretary.setCpf(secretaryForm.getCpf());
-        secretary.setUsername(secretaryForm.getUsername());
-        secretary.setPassword(passwordEncoder.encode(secretaryForm.getPassword()));
         secretary.setBornAt(secretaryForm.getBornAt());
 
         secretaryRepository.save(secretary);
@@ -113,13 +110,4 @@ public class SecretaryService {
         secretaryRepository.delete(oSecretary.get());
         return ResponseEntity.ok().build();
     }
-
-    /*
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Secretary secretary = secretaryRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("Username not found"));
-        return new User(secretary.getUsername(), secretary.getPassword(), secretary.getAuthorities());
-    }
-     */
-
 }

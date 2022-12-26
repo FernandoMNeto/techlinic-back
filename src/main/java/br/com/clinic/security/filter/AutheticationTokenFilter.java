@@ -1,8 +1,10 @@
-package br.com.clinic.security;
+package br.com.clinic.security.filter;
 
-import br.com.clinic.entities.models.Doctor;
+import br.com.clinic.entities.models.UserInfo;
 import br.com.clinic.repositories.DoctorRepository;
+import br.com.clinic.repositories.UserInfoRepository;
 import br.com.clinic.services.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,11 +19,12 @@ import java.io.IOException;
 public class AutheticationTokenFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
-    private final DoctorRepository doctorRepository;
+    private final UserInfoRepository userInfoRepository;
 
-    public AutheticationTokenFilter(TokenService tokenService, DoctorRepository doctorRepository) {
+    @Autowired
+    public AutheticationTokenFilter(TokenService tokenService, UserInfoRepository userInfoRepository) {
         this.tokenService = tokenService;
-        this.doctorRepository = doctorRepository;
+        this.userInfoRepository = userInfoRepository;
     }
 
     @Override
@@ -42,13 +45,14 @@ public class AutheticationTokenFilter extends OncePerRequestFilter {
 
         String username = tokenService.getUsernameToken(token);
 
-        Doctor doctor = doctorRepository.findByUsername(username).get();
+        UserInfo userInfo = userInfoRepository.findByUsername(username);
 
-        Authentication authetication = new UsernamePasswordAuthenticationToken(doctor, doctor.getPassword(), doctor.getAuthorities());
+        Authentication authetication = new UsernamePasswordAuthenticationToken(userInfo.getUsername(), userInfo.getPassword(), userInfo.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authetication);
     }
 
     private String recoverToken(HttpServletRequest request) {
+
         String token = request.getHeader("Authorization");
 
         if (token == null || !token.startsWith("Bearer ")) {

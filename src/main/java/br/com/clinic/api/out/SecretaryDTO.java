@@ -23,14 +23,13 @@ public class SecretaryDTO {
     private ContactDTO contact;
     private AddressDTO address;
 
-
     public SecretaryDTO(Secretary secretary) {
         this.id = secretary.getId();
         this.cpf = secretary.getCpf();
         this.firstName = secretary.getFirstName();
         this.lastName = secretary.getLastName();
-        this.username = secretary.getUsername();
-        this.password = secretary.getPassword();
+        this.username = secretary.getUserInfo().getUsername();
+        this.password = secretary.getUserInfo().getPassword();
         this.bornAt = secretary.getBornAt();
         this.age = (secretary.getBornAt().getYear() - LocalDate.now().getYear())*-1;
         this.contact = new ContactDTO(secretary.getContact());

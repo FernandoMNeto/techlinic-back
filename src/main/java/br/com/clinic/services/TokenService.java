@@ -2,6 +2,7 @@ package br.com.clinic.services;
 
 import java.util.Date;
 
+import br.com.clinic.entities.models.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

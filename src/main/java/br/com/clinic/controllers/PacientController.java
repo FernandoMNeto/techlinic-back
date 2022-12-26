@@ -32,12 +32,7 @@ public class PacientController {
     public ResponseEntity<PacientDTO> pacientById(@PathVariable Long id) {
         return pacientService.pacientById(id);
     }
-    /*
-    @PostMapping(path = "/consults/add")
-    public ResponseEntity<PacientDTO> registerConsultForPacient(ConsultForm consultForm, Long id) {
 
-    }
-    */
     @PostMapping(path = "/register")
     @Transactional
     public ResponseEntity<PacientDTO> registerPacient(@RequestBody @Valid PacientForm pacientForm, UriComponentsBuilder uriBuilder) {
