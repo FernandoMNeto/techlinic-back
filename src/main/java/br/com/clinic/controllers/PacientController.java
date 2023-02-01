@@ -28,6 +28,16 @@ public class PacientController {
         return pacientService.allPacients();
     }
 
+    @GetMapping("/like")
+    public ResponseEntity<List<PacientDTO>> pacientByNameLike(@RequestParam String name) {
+        return pacientService.pacientByNameLike(name);
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<PacientDTO> pacientByCPF(@RequestParam String cpf) {
+        return pacientService.pacientByCPF(cpf);
+    }
+
     @GetMapping(path = "/{id}")
     public ResponseEntity<PacientDTO> pacientById(@PathVariable Long id) {
         return pacientService.pacientById(id);

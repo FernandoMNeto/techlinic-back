@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,12 +38,11 @@ public class RestExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException manvException) {
 
-        HashMap<String, String> fieldsAndMessages = new HashMap<>();
-
         List<FieldError> fieldErrors = manvException.getBindingResult().getFieldErrors();
+        List<String> fieldsAndErrors = new ArrayList<>();
 
         for(FieldError fam: fieldErrors) {
-            fieldsAndMessages.put(fam.getField(), fam.getDefaultMessage());
+            fieldsAndErrors.add(fam.getField() + ": " + fam.getDefaultMessage());
         }
 
         ValidationErrorDetails manvDetails = ValidationErrorDetails.Builder
@@ -49,9 +50,8 @@ public class RestExceptionHandler {
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .title("Field Validation Error")
-                .details("Field Validation Error in fields: " + fieldErrors.stream().map(FieldError::getField).collect(Collectors.joining(", ")))
+                .details("Field Validation Error in fields: " + fieldsAndErrors)
                 .developerMessage(manvException.getClass().getName())
-                .fieldsAndMessages(fieldsAndMessages)
                 .build();
         return new ResponseEntity<>(manvDetails, HttpStatus.BAD_REQUEST);
     }

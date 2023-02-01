@@ -41,6 +41,11 @@ public class PacientService {
         return ResponseEntity.ok(PacientDTO.convertPacientToDTO(pacients));
     }
 
+    public ResponseEntity<List<PacientDTO>> pacientByNameLike(String name) {
+        List<Pacient> pacients = pacientRepository.findByFirstNameStartsWithIgnoreCase(name);
+        return ResponseEntity.ok(PacientDTO.convertPacientToDTO(pacients));
+    }
+
     public ResponseEntity<PacientDTO> pacientById(Long id) {
         Optional<Pacient> oPacient = pacientRepository.findById(id);
 
@@ -103,4 +108,12 @@ public class PacientService {
         return ResponseEntity.ok().build();
     }
 
+    public ResponseEntity<PacientDTO> pacientByCPF(String cpf) {
+        Optional<Pacient> oPacient = pacientRepository.findByCpf(cpf);
+
+        if (oPacient.isEmpty()) {
+            throw new ResourceNotFoundException("Pacient not found");
+        }
+        return ResponseEntity.ok(new PacientDTO(oPacient.get()));
+    }
 }

@@ -1,6 +1,5 @@
 package br.com.clinic.services;
 
-import br.com.clinic.entities.models.Contact;
 import br.com.clinic.entities.models.UserInfo;
 import br.com.clinic.repositories.UserInfoRepository;
 import org.springframework.http.ResponseEntity;

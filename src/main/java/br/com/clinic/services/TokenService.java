@@ -46,7 +46,6 @@ public class TokenService {
         } catch (Exception e) {
             return false;
         }
-
     }
 
     public String getUsernameToken(String token) {

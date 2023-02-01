@@ -1,8 +1,8 @@
 package br.com.clinic.security.config;
 
 
-import br.com.clinic.repositories.UserInfoRepository;
 import br.com.clinic.security.filter.AutheticationTokenFilter;
+import br.com.clinic.repositories.UserInfoRepository;
 import br.com.clinic.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -44,9 +44,11 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors().and()
                 .csrf().disable()
                 .authorizeRequests(auth -> {
                     auth.antMatchers(HttpMethod.POST, "/login").permitAll();
+                    auth.antMatchers("/swagger-ui.html").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(new AutheticationTokenFilter(tokenService, userInfoRepository), UsernamePasswordAuthenticationFilter.class)

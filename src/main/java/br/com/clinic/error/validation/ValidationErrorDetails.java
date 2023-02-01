@@ -11,15 +11,12 @@ import java.util.HashMap;
 @Setter
 public class ValidationErrorDetails extends ErrorDetail {
 
-    private HashMap<String, String> fieldsAndMessages;
-
     public static final class Builder {
         private String title;
         private int status;
         private String details;
         private LocalDateTime timestamp;
         private String developerMessage;
-        private HashMap<String, String> fieldsAndMessages;
 
         private Builder() {
         }
@@ -53,11 +50,6 @@ public class ValidationErrorDetails extends ErrorDetail {
             return this;
         }
 
-        public Builder fieldsAndMessages(HashMap<String, String> fieldAndMessages) {
-            this.fieldsAndMessages = fieldAndMessages;
-            return this;
-        }
-
         public ValidationErrorDetails build() {
             ValidationErrorDetails validationErrorDetails = new ValidationErrorDetails();
             validationErrorDetails.setDeveloperMessage(developerMessage);
@@ -65,7 +57,6 @@ public class ValidationErrorDetails extends ErrorDetail {
             validationErrorDetails.setDetails(details);
             validationErrorDetails.setStatus(status);
             validationErrorDetails.setTimestamp(timestamp);
-            validationErrorDetails.fieldsAndMessages = fieldsAndMessages;
             return validationErrorDetails;
         }
     }

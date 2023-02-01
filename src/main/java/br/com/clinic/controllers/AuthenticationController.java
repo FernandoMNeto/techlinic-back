@@ -2,20 +2,16 @@ package br.com.clinic.controllers;
 
 import br.com.clinic.api.in.LoginForm;
 import br.com.clinic.api.out.TokenDTO;
-import br.com.clinic.services.DoctorService;
-import br.com.clinic.services.SecretaryService;
 import br.com.clinic.services.TokenService;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -34,12 +30,26 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<TokenDTO> login(@RequestBody @Valid LoginForm loginForm) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginForm.getUsername(),
-                        loginForm.getPassword()
-                )
-        );
+
+        Authentication authentication;
+
+        try {
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginForm.getUsername(),
+                            loginForm.getPassword()
+                    )
+            );
+        } catch (Exception e) {
+            throw new BadCredentialsException("bad credentials");
+        }
+
         return new ResponseEntity<>(new TokenDTO(tokenService.generateToken(authentication), "Bearer"), HttpStatus.OK);
     }
+
+    @GetMapping("/isTokenValid")
+    public ResponseEntity<Void> isTokenValid() {
+        return ResponseEntity.ok().build();
+    }
+
 }

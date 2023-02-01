@@ -1,7 +1,6 @@
 package br.com.clinic.security.filter;
 
 import br.com.clinic.entities.models.UserInfo;
-import br.com.clinic.repositories.DoctorRepository;
 import br.com.clinic.repositories.UserInfoRepository;
 import br.com.clinic.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;

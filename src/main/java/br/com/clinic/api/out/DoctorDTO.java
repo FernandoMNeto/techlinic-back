@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 @Getter
@@ -34,7 +35,7 @@ public class DoctorDTO {
         this.cpf = doctor.getCpf();
         this.crm = doctor.getCrm();
         this.bornAt = doctor.getBornAt();
-        this.age = (doctor.getBornAt().getYear() - LocalDate.now().getYear())*-1;
+        this.age = Math.toIntExact(ChronoUnit.YEARS.between(doctor.getBornAt(), LocalDate.now()));
         this.consults = ConsultDTO.convertConsultToDTO(doctor.getConsults());
         this.contact = new ContactDTO(doctor.getContact());
         this.address = new AddressDTO(doctor.getAddress());
