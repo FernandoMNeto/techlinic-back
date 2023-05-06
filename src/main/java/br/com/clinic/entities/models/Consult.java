@@ -40,6 +40,7 @@ public class Consult {
     private String description;
     private String complaint;
     private String diagnosis;
+    private String prescription;
     private LocalTime time;
     private LocalDate date;
     @Enumerated(EnumType.STRING)
@@ -51,6 +52,7 @@ public class Consult {
         this.description = consultForm.getDescription();
         this.complaint = consultForm.getComplaint();
         this.diagnosis = consultForm.getDiagnosis();
+        this.prescription = consultForm.getPrescription();
         this.time = consultForm.getTime();
         this.date = consultForm.getDate();
         this.situation = Situation.SCHEDULED;

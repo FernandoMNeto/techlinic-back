@@ -10,8 +10,11 @@ import org.springframework.security.core.userdetails.User;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -23,6 +26,12 @@ public class DoctorForm {
     private String firstName;
     @NotBlank
     private String lastName;
+    @NotNull
+    private BigDecimal consultValue;
+    @NotNull
+    private LocalTime startWork;
+    @NotNull
+    private LocalTime stopWork;
     @NotBlank
     private String cpf;
     @Past

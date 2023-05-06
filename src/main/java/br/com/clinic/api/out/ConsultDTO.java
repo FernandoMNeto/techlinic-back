@@ -3,10 +3,13 @@ package br.com.clinic.api.out;
 import br.com.clinic.entities.models.Consult;
 import br.com.clinic.entities.models.Doctor;
 import br.com.clinic.entities.models.Pacient;
+import br.com.clinic.enums.Situation;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +18,6 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 public class ConsultDTO {
-
     private Long id;
     private Long pacientId;
     private String pacientName;
@@ -25,6 +27,7 @@ public class ConsultDTO {
     private String description;
     private String complaint;
     private String diagnosis;
+    private String situation;
     private String time;
     private String date;
 
@@ -42,6 +45,7 @@ public class ConsultDTO {
         this.description = consult.getDescription();
         this.complaint = consult.getComplaint();
         this.diagnosis = consult.getDiagnosis();
+        this.situation = consult.getSituation().name();
         this.time = consult.getTime().format(formatterTime);
         this.date = consult.getDate().format(formatterDate);
     }

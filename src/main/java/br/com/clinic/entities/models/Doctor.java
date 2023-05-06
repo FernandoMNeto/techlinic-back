@@ -1,5 +1,7 @@
 package br.com.clinic.entities.models;
 
+import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,7 +30,10 @@ public class Doctor extends People {
     private Long id;
     @Column(unique = true)
     private String crm;
-
+    @Column(precision = 10, scale = 2)
+    private BigDecimal consultValue;
+    private LocalTime startWork;
+    private LocalTime stopWork;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userinfo_id")
     private UserInfo userInfo;
@@ -40,6 +45,9 @@ public class Doctor extends People {
                 doctorForm.getCpf(), doctorForm.getBornAt(), doctorForm.getContact(), doctorForm.getAddress());
         this.userInfo = doctorForm.getUserInfo();
         this.crm = doctorForm.getCrm();
+        this.consultValue = doctorForm.getConsultValue();
+        this.startWork = doctorForm.getStartWork();
+        this.stopWork = doctorForm.getStopWork();
         this.consults = new ArrayList<>();
     }
     public void addNewConsult(Consult consult) {

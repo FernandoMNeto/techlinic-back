@@ -43,21 +43,17 @@ public class AutheticationTokenFilter extends OncePerRequestFilter {
     private void autheticateToken(String token) {
 
         String username = tokenService.getUsernameToken(token);
-
         UserInfo userInfo = userInfoRepository.findByUsername(username);
-
         Authentication authetication = new UsernamePasswordAuthenticationToken(userInfo.getUsername(), userInfo.getPassword(), userInfo.getAuthorities());
+
         SecurityContextHolder.getContext().setAuthentication(authetication);
     }
 
     private String recoverToken(HttpServletRequest request) {
-
         String token = request.getHeader("Authorization");
-
         if (token == null || !token.startsWith("Bearer ")) {
             return null;
         }
-
         return token.substring(7);
     }
 }

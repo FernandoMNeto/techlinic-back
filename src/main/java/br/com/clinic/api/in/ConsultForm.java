@@ -1,5 +1,6 @@
 package br.com.clinic.api.in;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +26,8 @@ public class ConsultForm {
     private String complaint;
     @NotBlank
     private String diagnosis;
+    @NotBlank
+    private String prescription;
     @NotNull
     private LocalTime time;
     @NotNull

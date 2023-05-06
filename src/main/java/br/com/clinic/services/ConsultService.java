@@ -6,6 +6,7 @@ import br.com.clinic.entities.models.Hours;
 import br.com.clinic.entities.models.Consult;
 import br.com.clinic.entities.models.Doctor;
 import br.com.clinic.entities.models.Pacient;
+import br.com.clinic.enums.Situation;
 import br.com.clinic.error.resourcenotfound.ResourceNotFoundException;
 import br.com.clinic.repositories.ConsultRepository;
 import br.com.clinic.repositories.DoctorRepository;
@@ -97,5 +98,29 @@ public class ConsultService {
         return ResponseEntity.ok(new ConsultDTO(consult));
     }
 
+    public ResponseEntity<ConsultDTO> confirmConsult(Long id) {
+        Optional<Consult> optionalConsult = consultRepository.findById(id);
+        if (optionalConsult.isEmpty()) {
+            throw new ResourceNotFoundException("Consult not found with ID: " + id);
+        }
 
+        Consult consult = optionalConsult.get();
+        consult.setSituation(Situation.CONFIRMED);
+
+        consultRepository.save(consult);
+        return ResponseEntity.ok(new ConsultDTO(consult));
+    }
+
+    public ResponseEntity<Void> cancelConsult(Long id) {
+        Optional<Consult> optionalConsult = consultRepository.findById(id);
+        if (optionalConsult.isEmpty()) {
+            throw new ResourceNotFoundException("Consult not found with ID: " + id);
+        }
+
+        Consult consult = optionalConsult.get();
+        consult.setSituation(Situation.CANCELED);
+
+        consultRepository.save(consult);
+        return ResponseEntity.ok().build();
+    }
 }

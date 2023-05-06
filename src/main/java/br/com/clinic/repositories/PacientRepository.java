@@ -11,6 +11,10 @@ import java.util.Optional;
 @Repository
 public interface PacientRepository extends JpaRepository<Pacient, Long> {
     List<Pacient> findByFirstNameStartsWithIgnoreCase(String name);
-
     Optional<Pacient> findByCpf(String cpf);
+    @Query(
+            value = "SELECT * FROM pacient ORDER BY upper(first_name)",
+            nativeQuery = true
+    )
+    List<Pacient> findAllOrderByFirstName();
 }

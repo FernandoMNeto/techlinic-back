@@ -36,7 +36,7 @@ public class PacientService {
 
     public ResponseEntity<List<PacientDTO>> allPacients() {
 
-        List<Pacient> pacients = pacientRepository.findAll();
+        List<Pacient> pacients = pacientRepository.findAllOrderByFirstName();
 
         return ResponseEntity.ok(PacientDTO.convertPacientToDTO(pacients));
     }

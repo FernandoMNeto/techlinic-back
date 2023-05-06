@@ -19,8 +19,6 @@ public class DoctorDTO {
     private String crm;
     private String firstName;
     private String lastName;
-    private String username;
-    private String password;
     private Integer age;
     private LocalDate bornAt;
     private ContactDTO contact;
@@ -30,8 +28,6 @@ public class DoctorDTO {
         this.id = doctor.getId();
         this.firstName = doctor.getFirstName();
         this.lastName = doctor.getLastName();
-        this.username = doctor.getUserInfo().getUsername();
-        this.password = doctor.getUserInfo().getPassword();
         this.cpf = doctor.getCpf();
         this.crm = doctor.getCrm();
         this.bornAt = doctor.getBornAt();

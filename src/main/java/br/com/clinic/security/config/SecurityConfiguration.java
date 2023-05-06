@@ -47,8 +47,8 @@ public class SecurityConfiguration {
                 .cors().and()
                 .csrf().disable()
                 .authorizeRequests(auth -> {
-                    auth.antMatchers(HttpMethod.POST, "/login").permitAll();
-                    auth.antMatchers("/swagger-ui.html").permitAll();
+                    auth.antMatchers(HttpMethod.POST).permitAll();
+                    auth.antMatchers(HttpMethod.GET).permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(new AutheticationTokenFilter(tokenService, userInfoRepository), UsernamePasswordAuthenticationFilter.class)

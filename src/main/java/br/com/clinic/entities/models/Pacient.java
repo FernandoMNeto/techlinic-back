@@ -24,7 +24,6 @@ public class Pacient extends People {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pacient")
     private List<Consult> consults;
 

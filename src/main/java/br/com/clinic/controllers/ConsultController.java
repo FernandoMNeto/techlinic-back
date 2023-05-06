@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/consults")
 public class ConsultController {
-
     private final ConsultService consultService;
 
     @Autowired
@@ -42,5 +41,16 @@ public class ConsultController {
     public ResponseEntity<ConsultDTO> registerConsult(@RequestBody ConsultForm consultForm) {
         return consultService.registerConsult(consultForm);
     }
+
+    @PostMapping(path = "/confirm/{id}")
+    public ResponseEntity<ConsultDTO> confirmConsult(@PathVariable Long id) {
+        return consultService.confirmConsult(id);
+    }
+
+    @PostMapping(path = "/cancel/{id}")
+    public ResponseEntity<Void> cancelConsult(@PathVariable Long id) {
+        return consultService.cancelConsult(id);
+    }
+
 
 }
